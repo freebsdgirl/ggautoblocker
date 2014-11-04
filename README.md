@@ -13,3 +13,7 @@ If you add CHSommers or Adam Baldwin back to the list of users, it's going to ta
 #### TODO
 
 Doesn't actually block users yet, but creates a list of users to block.
+
+#### Bugs
+
+Currently creating duplicate users in list, so needs to be run through uniq. My logic is broken somewhere. I'm tired, will fix later.
