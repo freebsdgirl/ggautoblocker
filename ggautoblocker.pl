@@ -12,7 +12,7 @@ my $consumer_secret = "";
 my $access_token = "";
 my $access_secret = "";
 
-my @idiots = ( "CHSommers", "AdamBaldwin", "Nero", "FartToContinue", "PlayDangerously" );
+my @idiots = ( "CHSommers", "AdamBaldwin", "Nero", "FartToContinue", "PlayDangerously", "roguestargamez" );
 #my @idiots = ( "FartToContinue", "PlayDangerously" );
 my @whitelist = ( "gamergatetxt" );
 
@@ -154,7 +154,10 @@ print "Examining follower lists...\n";
 # API calls later when we're checking usernames.
 my %seen;
 foreach my $id (@follower_ids) {
-	if ( $seen{$id} ) {
+	if ( exists $seen{$id} ) {
+		next if $seen{$id} != 1;
+		$seen{$id}++;
+
 		my $found = 0;
 
 		# does this id exist in our followers?
