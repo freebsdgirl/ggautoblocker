@@ -1,5 +1,9 @@
 # GG auto blocker
 
+#### Intro
+
+Takes a list of the 4 major idiots of GG, looks at their follower lists. Generatees a list of sheeple following more than one account.
+
 #### Dependancies
 
 Requires Net::Twitter which has a huge level of crazy deps.
