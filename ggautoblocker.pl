@@ -3,7 +3,6 @@
 use strict;
 
 use Net::Twitter;
-use Data::Dumper;
 
 # Needs read/write access!
 
