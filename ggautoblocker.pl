@@ -12,7 +12,7 @@ my $consumer_secret = "";
 my $access_token = "";
 my $access_secret = "";
 
-#my @idiots = ( "CHSommers", "AdamBaldwin", "FartToContinue", "PlayDangerously" );
+#my @idiots = ( "CHSommers", "AdamBaldwin", "Nero", "FartToContinue", "PlayDangerously" );
 my @idiots = ( "FartToContinue", "PlayDangerously" );
 my @whitelist = ( "gamergatetxt" );
 my @blacklist; 
