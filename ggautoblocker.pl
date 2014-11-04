@@ -10,13 +10,16 @@ my $consumer_key = "";
 my $consumer_secret = "";
 
 my $access_token = "";
-my $acces_token_secret = "";
+my $access_secret = "";
 
 #my @idiots = ( "CHSommers", "AdamBaldwin", "FartToContinue", "PlayDangerously" );
 my @idiots = ( "FartToContinue", "PlayDangerously" );
 my @whitelist = ( "gamergatetxt" );
 my @blacklist; 
 
+my @myfollower_ids;
+my @shared_ids;
+my @shared_names;
 my @sheeple_ids;
 my @sheeple_names; # add any other users you want blocked here 
 
@@ -55,6 +58,26 @@ foreach my $idiot ( @idiots ) {
 }
 
 
+
+print "Getting a list of my followers for comparison.";
+
+# TODO: still suffers from rate limiting problems. 
+# TODO: move this to a function, because we're repeating code from earlier.
+for ( my $cursor = -1, my $r; $cursor; $cursor = $r->{next_cursor} ) {
+	my $m = $nt->rate_limit_status();
+
+	if ( $m->{'resources'}->{'followers'}->{'/followers/ids'}->{'remaining'} == 0) {
+		while (time <= $m->{'resources'}->{'followers'}->{'/followers/ids'}->{'reset'}) {
+			sleep 1;
+		}
+	}
+
+	$r = $nt->followers_ids({ cursor => $cursor });
+	push @myfollower_ids, @{$r->{ids}};
+	print ".";
+	sleep 1;
+}
+
 # get a list of unique usernames.
 
 print "\nExamining follower lists...\n";
@@ -64,12 +87,20 @@ foreach my $id (@blacklist) {
 	if ( $seen{$id} ) {
 		push @sheeple_ids, $id;
 	} else {
+		# does this id exist in our followers?
+		foreach my $my_id ( @myfollower_ids ) {
+			if ( $my_id == $id ) {
+				push @shared_ids, $id;
+			}
+		}
+			
 		$seen{$id} = 1;
 	}
 }
 
 print "> $#blacklist users following idiots.\n";
 print "> $#sheeple_ids users following multiple accounts.\n";
+print "> $#shared_ids users following me.\n";
 
 print "Saving list of IDs to block_ids.txt.\n";
 open BL, '>block_ids.txt' or die "Can't open block_ids.txt: $!\n";
@@ -77,7 +108,6 @@ foreach ( @sheeple_ids ) {
 	print BL "$_\n";
 }
 close BL;
-
 
 
 # lookup usernames. limited to 100 users per request, 1000 calls per hour.
@@ -95,6 +125,16 @@ while ( $#sheeple_ids > 0 ) {
 	}
 	print ".";
 }
+
+while ($#shared_ids > 0 ) {
+	my @ids = splice @shared_ids, 0, 100;
+	my $sheeple = $nt->lookup_users( { user_id => \@ids } );
+
+	foreach my $sheep ( @{$sheeple} ) {
+		push @shared_names, $sheep->{'screen_name'};
+	}
+	print ".";
+}
 print " done.\n";
 
 print "Saving list of usernames to block_names.txt.\n";
@@ -106,6 +146,13 @@ foreach my $sheep ( @sheeple_names ) {
 		}
 	}
 
+	print BL "$sheep\n";
+}
+close BL;
+
+print "Saving list of shared usernames to shared_names.txt.\n";
+open BL, '>shared_names.txt' or die "Can't open shared_names.txt: $!\n";
+foreach my $sheep ( @shared_names ) {
 	print BL "$sheep\n";
 }
 close BL;
