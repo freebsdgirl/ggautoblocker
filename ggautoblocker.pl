@@ -12,8 +12,8 @@ my $consumer_secret = "";
 my $access_token = "";
 my $access_secret = "";
 
-#my @idiots = ( "CHSommers", "AdamBaldwin", "Nero", "FartToContinue", "PlayDangerously" );
-my @idiots = ( "FartToContinue", "PlayDangerously" );
+my @idiots = ( "CHSommers", "AdamBaldwin", "Nero", "FartToContinue", "PlayDangerously" );
+#my @idiots = ( "FartToContinue", "PlayDangerously" );
 my @whitelist = ( "gamergatetxt" );
 
 my $debug = 1;
@@ -42,9 +42,7 @@ sub get_rate_limit {
 
 		if ( $m->{'resources'}->{'application'}->{'/application/rate_limit_status'}->{'remaining'} == 0 ) {
 			print " -- API limit reached, waiting for ". ( $m->{'resources'}->{'application'}->{'/application/rate_limit_status'}->{'reset'} - time ) . " seconds --\n" if $debug;
-		while ( time < $m->{'resources'}->{'application'}->{'/application/rate_limit_status'}->{'reset'} ) {
-			sleep 1;
-		}
+		sleep ( $m->{'resources'}->{'application'}->{'/application/rate_limit_status'}->{'reset'} - time + 1 );
 	}
 
 	if ( $type =~ /followers/ ) {
@@ -69,9 +67,7 @@ sub wait_for_rate_limit {
 
 	if ( $limit->{'remaining'} == 0 ) {
 		print " -- API limit reached, waiting for ". ( $limit->{'reset'} - time ) . " seconds --\n" if $debug;
-		while ( time <= $limit->{'reset'} ) {
-			sleep 1;
-		}
+		sleep ( $limit->{'reset'} - time + 1 );
 	}
 }
 
