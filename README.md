@@ -2,7 +2,7 @@
 
 #### Intro
 
-Takes a list of the 5 major idiots of GG, looks at their follower lists. Generatees a list of sheeple following more than one account.
+Takes a list of the 5 major idiots of GG, looks at their follower lists. Generates a list of sheeple following more than one account, as well as a list of your followers that might be questionable.
 
 #### Dependancies
 
