@@ -10,7 +10,7 @@ my $consumer_key = "";
 my $consumer_secret = "";
 
 my $access_token = "";
-my $acces_token_secret = "";
+my $access_secret = "";
 
 #my @idiots = ( "CHSommers", "AdamBaldwin", "FartToContinue", "PlayDangerously" );
 my @idiots = ( "FartToContinue", "PlayDangerously" );
