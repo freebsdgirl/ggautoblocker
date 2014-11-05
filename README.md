@@ -6,7 +6,7 @@ Takes a list of the 5 major idiots of GG, looks at their follower lists. Generat
 
 This does not rank users. It doesn't look at bios, it doesn't look at hashtags. But GamerGate appears to be completely useless at figuring out github when it's not just a wiki explaining how to be shitheads, so they'll probably never read this README and figure that part out.
 
-#### Dependancies
+#### Dependencies
 
 Requires Net::Twitter which has a huge level of crazy deps.
 
