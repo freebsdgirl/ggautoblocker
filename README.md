@@ -2,7 +2,7 @@
 
 #### Intro
 
-Takes a list of the 5 major idiots of GG, looks at their follower lists. Generates a list of sheeple following more than one account, as well as a list of your followers that might be questionable.
+Takes a list of the supposed ringleaders of GG, looks at their follower lists. Generates a list of sheeple following more than one account, as well as a list of your followers that might be questionable.
 
 This does not rank users. It doesn't look at bios, it doesn't look at hashtags. But GamerGate appears to be completely useless at figuring out github when it's not just a wiki explaining how to be shitheads, so they'll probably never read this README and figure that part out.
 
@@ -32,7 +32,7 @@ Follow one of the idiots. Submitting a pull request to get added to the list doe
 
 ##### How do I remove myself from the list?
 
-Submit a pull request to add yourself to the whitelisted users. I'll review your account and add you if you don't appear to be a miserable excuse for a human being. 
+Submit a pull request to add yourself to the whitelisted users. I'll review your account and add you if you don't appear to be a miserable excuse for a human being. I've made this easier, as there's now a whitelist.txt file. Create pull requests against this file. 
 
 ##### You just don't want to have a healthy discussion!
 

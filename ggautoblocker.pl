@@ -12,16 +12,18 @@ my $consumer_secret = "";
 my $access_token = "";
 my $access_secret = "";
 
-my @idiots = ( "CHSommers", "AdamBaldwin", "Nero", "FartToContinue", "PlayDangerously", "roguestargamez" );
-#my @idiots = ( "FartToContinue", "PlayDangerously" );
-my @whitelist = ( "gamergatetxt" );
+my $blacklist_file = "blacklist.txt";
+my $whitelist_file = "whitelist.txt";
 
 my $debug = 1;
+
+my ( @whitelist, @idiots );
 
 my ( @follower_ids, @myfollower_ids, @shared_ids, @shared_names, @sheeple_ids, @sheeple_names );
 
 
 # set up our twitter connection
+
 my $nt = Net::Twitter->new(
 	traits			=> [qw/API::RESTv1_1/],
 	ssl			=> 1,
@@ -126,6 +128,24 @@ sub is_whitelisted {
 
 	return 0;
 }
+
+
+# get a list of whitelisted users
+open W, '<', $whitelist_file or die "Can't open $whitelist_file: $!\n";
+foreach ( <W> ) {
+	chomp;
+	push @whitelist, $_;
+}
+close W;
+
+
+# get a list of idiots
+open B, '<', $blacklist_file or die "Can't open $blacklist_file: $!\n";
+foreach ( <B> ) {
+	chomp;
+	push @idiots, $_;
+}
+close B;
 
 
 
