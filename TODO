@@ -1,0 +1,10 @@
+Check whitelist IDs instead of names
+
+Add scoring:
+	- age of account
+	- follower:following ratio
+	- number of blacklisted users a sheeple is following
+
+Split up API requests so after every block of follower ids is retrieved, an API request to retrieve the username immediately follows it. We'll see how this works. It's going to add more requests for users because prior to this, we were only querying users that followed more than 1 account. If it gets to be a problem, can switch back to the old method.
+
+Update README to reflect how to use third-party tools to implement mass blocks until API issues are worked out with twitter.
