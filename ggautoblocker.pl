@@ -19,7 +19,9 @@ my $debug = 1;
 
 my ( @whitelist, @idiots );
 
-my ( @follower_ids, @myfollower_ids, @shared_ids, @shared_names, @sheeple_ids, @sheeple_names );
+my %problem;
+
+my ( @follower_ids, @myfollower_ids, @sheeple_ids );
 
 
 # set up our twitter connection
@@ -97,8 +99,8 @@ sub get_followers {
 
 # get screen_names to go along with the account ids.
 sub get_screen_names {
-	my $user_ids = shift; 
-	my @ids = @$user_ids;
+	my $sheeple = shift;
+	my @ids = keys %$sheeple;
 	my @names;
 
 	while ( $#ids > 0 ) {
@@ -108,17 +110,17 @@ sub get_screen_names {
 		my $users = $nt->lookup_users( { user_id => \@subset_ids } );
 
 		foreach my $user ( @{$users} ) {
-			push @names, $user->{'screen_name'};
+			$sheeple->{$user->{'id'}}->{'name'} = $user->{'screen_name'};
 		}
 	}
 
-	return @names;
 }
 
 
 # is username in whitelist?
 sub is_whitelisted {
 	my $sheep = shift;
+        return 0 unless $sheep;
 
 	if ( @whitelist ) {
 		foreach my $notasheep ( @whitelist ) {
@@ -172,71 +174,66 @@ print "Examining follower lists...\n";
 # if the sheeple is following us, don't put it in the main array. put it in
 # a separate data structure. This is to keep ourselves from doing excessive
 # API calls later when we're checking usernames.
-my %seen;
 foreach my $id (@follower_ids) {
-	if ( exists $seen{$id} ) {
-		next if $seen{$id} != 1;
-		$seen{$id}++;
-
-		my $found = 0;
+	if ( exists $problem{$id} ) {
+		$problem{$id}->{'count'}++;
+	} else {
+		$problem{$id}->{'count'} = 1;
 
 		# does this id exist in our followers?
 		foreach my $my_id ( @myfollower_ids ) {
 			if ( $my_id == $id ) {
-				push @shared_ids, $id;
-				$found = 1;
+				$problem{$id}->{'stalker'} = 1;
 			}
 		}
-
-		push @sheeple_ids, $id if $found == 0;
-
-	} else {
-		$seen{$id} = 1;
 	}
 }
 
 # print out some stats
+# BUG! these numbers aren't accurate. plzfix.
+@sheeple_ids = keys %problem;
 print "> $#follower_ids users following idiots.\n";
-print "> " . ($#sheeple_ids + $#shared_ids ) . " users following multiple accounts.\n";
-print "> $#shared_ids users following me.\n";
+print "> $#sheeple_ids users following multiple accounts.\n";
 
 
 # save ids to file if we're debugging
 if ( $debug ) {
 	print "Saving list of IDs to block_ids.txt.\n";
 	open BL, '>block_ids.txt' or die "Can't open block_ids.txt: $!\n";
-	foreach ( @sheeple_ids, @shared_ids ) {
-		print BL "$_\n";
+	foreach my $monster ( keys %problem ) {
+		if ( $problem{$monster}->{'count'} == 1 ) {
+			delete $problem{$monster};
+		} else {
+			print BL "$monster\n";
+		}
 	}
 	close BL;
 }
 
-
 # turn IDs into usernames.
 print "Getting list of usernames from IDs.\n";
 
-@sheeple_names = get_screen_names(\@sheeple_ids);
-@shared_names = get_screen_names(\@shared_ids);
+get_screen_names(\%problem);
 
 
 # save to a file, but only if they aren't part of the whitelist.
-print "Saving list of usernames to block_names.txt.\n";
+print "Saving list of usernames to block_names.txt & shared_names.txt\n";
 open BL, '>block_names.txt' or die "Can't open block_names.txt: $!\n";
-foreach my $sheep ( @sheeple_names ) {
-	next if is_whitelisted( $sheep );
+open SL, '>shared_names.txt' or die "Can't open shared_names.txt: $!\n";
+foreach my $sheep ( keys %problem ) {
+	next if is_whitelisted( $problem{$sheep}->{'name'} );
+	next unless exists $problem{$sheep}->{'name'};
+	next unless exists $problem{$sheep}->{'count'};
 
-	print BL "$sheep\n";
+	print BL $problem{$sheep}->{'name'}."\n";
+
+	if ( exists $problem{$sheep}->{'stalker'} ) {
+		print SL $problem{$sheep}->{'name'}."\n";
+	}
 }
 close BL;
+close SL;
 
-print "Saving list of my suspect followers usernames to shared_names.txt.\n";
-open BL, '>shared_names.txt' or die "Can't open shared_names.txt: $!\n";
-foreach my $sheep ( @shared_names ) {
-	next if is_whitelisted( $sheep );
-
-	print BL "$sheep\n";
-}
-close BL;
 
 # TODO: actually block the user!
 # $nt->create_block( { user_id => $id } )
