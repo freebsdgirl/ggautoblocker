@@ -8,6 +8,10 @@ Takes a list of the supposed ringleaders of GG, looks at their follower lists. G
 
 This does not rank users. It doesn't look at bios, it doesn't look at hashtags. But GamerGate appears to be completely useless at figuring out github when it's not just a wiki explaining how to be shitheads, so they'll probably never read this README and figure that part out.
 
+#### Blocking
+
+To block everyone on the current list, log in to Twitter, then [subscribe to the blocklist] (https://blocktogether.org/show-blocks/5867111278318bd542293272f75147f8fc5931bea431e7ca16e9242964965d66494a6fb68f3518b82f171bcf0e419ccc).
+
 #### Dependencies
 
 Requires Net::Twitter which has a huge level of crazy deps.
