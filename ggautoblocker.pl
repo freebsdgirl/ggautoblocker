@@ -12,7 +12,7 @@ my $consumer_secret = "";
 my $access_token = "";
 my $access_secret = "";
 
-my $blacklist_file = "blacklist.txt";
+my $sourcelist_file = "sourcelist.txt";
 my $whitelist_file = "whitelist.txt";
 
 my $debug = 1;
@@ -142,7 +142,7 @@ close W;
 
 
 # get a list of idiots
-open B, '<', $blacklist_file or die "Can't open $blacklist_file: $!\n";
+open B, '<', $sourcelist_file or die "Can't open $sourcelist_file: $!\n";
 foreach ( <B> ) {
 	chomp;
 	push @idiots, $_;
