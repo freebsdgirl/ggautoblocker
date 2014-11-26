@@ -19,7 +19,7 @@ function add_whitelist_to_git(){
 }
 
 function main(){
-  if [[ $(grep -i -e "$USERNAME" whitelist.txt ) ]];then
+  if [[ $(grep -i -e "^$USERNAME$" whitelist.txt ) ]];then
     user_exists_warning
   else
     add_user_to_whitelist
