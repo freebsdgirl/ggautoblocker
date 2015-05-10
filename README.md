@@ -1,4 +1,4 @@
-# GG auto blocker
+# Good Game Auto Blocker
 
 Please see http://blog.randi.io/good-game-auto-blocker/ for a more updated version of this README.
 
